@@ -5,6 +5,8 @@ window.app =
     $("#channels_holder").on("click", ".not_selected", app.selected)
     $("#channels_holder").on("click", ".selected", app.unselect)
     app.pusher = new Pusher("<%= Pusher.key %>")
+    $("#index_logged_in").on("click", "#submit_chat", app.send_chat)
+    $("#game_area").on("click", "#join_btn", app.add_user_to_game)
   selected: ->
     if($(".selected").length != 0)
       $($(".selected")[0]).removeClass("selected").addClass("not_selected")
@@ -13,15 +15,63 @@ window.app =
       app.pusher.unsubscribe(app.name)
     app.name = $(this).children().text()
     app.pusher.subscribe(app.name)
+    app.correct_chat()
     app.bind_events()
+    app.show_game()
   unselect: ->
     $(this).removeClass("selected").addClass("not_selected")
     _.each(app.pusher.channels.channels, (x) -> app.pusher.unsubscribe(x.name))
   bind_events: ->
     channel = app.pusher.channels.channels[app.name]
     channel.bind("chat", app.chat)
+    channel.bind("join", app.join_game)
   chat: (data) ->
     console.log(data)
+    div = $("<div>").text(data)
+    $("#chat").append(div)
+  correct_chat: ->
+    settings =
+      datatype: "script"
+      type: "get"
+      url: "/channels/correct_chat"
+    $.ajax(settings)
+  send_chat: ->
+    text = $("#chat_text").val()
+    $("#chat_text").val("")
+    token = $("input[name=authenticity_token]").val()
+    settings =
+      datatype: "json"
+      type: "post"
+      url: "/channels/send_chat"
+      data:
+        authenticity_token:token
+        chat_text:text
+        channel:app.name
+    $.ajax(settings)
+  show_game: ->
+    settings =
+      datatype: "script"
+      type: "get"
+      url: "/channels/show_game?channel=#{app.name}"
+    $.ajax(settings)
+  join_game: (data) ->
+    console.log(data)
+    li = $("<li>").text(data)
+    $("#users_in_game").append(li)
+    $("#join_btn").remove()
+  add_user_to_game: (e) ->
+    e.preventDefault()
+    token = $("input[name=authenticity_token]").val()
+    game = $("#game_id").text()
+    settings =
+      datatype: "json"
+      type: "post"
+      url: "/games/join_game"
+      data:
+        authenticity_token:token
+        game_id:game
+        channel:app.name
+    $.ajax(settings)
 
 
 $(document).ready(app.ready)

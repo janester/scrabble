@@ -1,0 +1,17 @@
+-if @game.nil?
+  =form_tag "/games", :remote => true do
+    =hidden_field_tag :channel, @channel.id
+    =hidden_field_tag :user, @current_user.id
+    =submit_tag "Create Game"
+-else
+  -unless @game.users.include?@current_user
+    #game_id.hide= @game.id
+    =button_to("Join Game", "#", :class => "button radius", :id => "join_btn")
+  %ul#users_in_game
+    -@game.users.each do |user|
+      %li= user.username
+  %table
+    -15.times do |r|
+      %tr
+      -15.times do |col|
+        %td{:data => {col:col, row:r}} *

@@ -37,6 +37,20 @@ body {
       margin-left: 20px;
     }
   }
+  #chat {
+    width: 100%;
+    background-color: white;
+    margin-bottom: 10px;
+    color: black;
+    padding: 10px;
+    font-weight: 300;
+    div {
+      margin-top: 5px;
+    }
+  }
+  #users_in_game {
+    margin-left: 20px;
+  }
 }
 
 .selected {
@@ -44,4 +58,10 @@ body {
   a {
     color: white;
   }
+}
+table {
+  width: 100%;
+}
+.hide {
+  display: hidden;
 }

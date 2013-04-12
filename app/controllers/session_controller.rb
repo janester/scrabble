@@ -9,6 +9,8 @@ class SessionController < ApplicationController
       session[:user_id] = User.create(username:params[:username], is_online: true)
     end
     authenticate
+    @channel = Channel.new
+    @channels = Channel.order(:name)
   end
 
   def destroy
