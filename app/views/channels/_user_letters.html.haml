@@ -1,0 +1,8 @@
+-if @current_user.letters.present?
+  %table
+    %tr
+    -@current_user.letters.each_char do |letter|
+      -if @game.current_player == @current_user.username
+        %td.selectable= letter
+      -else
+        %td= letter

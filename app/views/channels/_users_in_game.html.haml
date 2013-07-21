@@ -1,0 +1,5 @@
+-@game.users.each do |user|
+  -if @game.current_player == user.username
+    %li.current= user.username
+  -else
+    %li= user.username

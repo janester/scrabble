@@ -22,7 +22,7 @@ window.app =
     $(this).removeClass("selected").addClass("not_selected")
     _.each(app.pusher.channels.channels, (x) -> app.pusher.unsubscribe(x.name))
   bind_events: ->
-    channel = app.pusher.channels.channels[app.name]
+    channel =  app.pusher.channels.channels[app.name]a
     channel.bind("chat", app.chat)
     channel.bind("join", app.join_game)
   chat: (data) ->
